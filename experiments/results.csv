@@ -1,13 +1,12 @@
 experiment,run,model,model_version,temperature,skill_tag,fr_count,ifr_count,story_count,scenario_count,test_count,fr_coverage_ok,within_budget,notes
 baseline,0,claude-fable-5,claude-fable-5,default,instructions/v1.0.0,8,8,5,14,16,yes,n/a,single baseline pipeline run
-A,01,Claude Fable 5 (claude-fable-5),Claude Fable 5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,no,
-A,02,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,
-A,03,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,
-A,04,Fable 5 (claude-fable-5),Fable 5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,
-A,05,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,no,
-A,06,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,no,
-A,07,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,
-A,08,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,7,7,,,,no,no,
-A,08,Fable 5 (claude-fable-5),Fable 5 (claude-fable-5),default,instructions/v1.0.0,7,7,,,,no,no,
-A,09,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,7,7,,,,no,no,
-A,10,Fable 5 (claude-fable-5),Fable 5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,no,
+A,01,Claude Fable 5 (claude-fable-5),Claude Fable 5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,no,FR split; all 10 R-items covered
+A,02,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,matches baseline structure
+A,03,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,matches baseline structure
+A,04,Fable 5 (claude-fable-5),Fable 5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,matches baseline structure
+A,05,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,no,FR split; all 10 R-items covered
+A,06,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,no,FR split; all 10 R-items covered
+A,07,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,matches baseline structure
+A,08,Fable 5 (claude-fable-5),Fable 5 (claude-fable-5),default,instructions/v1.0.0,7,7,,,,no,no,FR regrouped; all 10 R-items covered (ID-based check false alarm; run redone once)
+A,09,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,7,7,,,,no,no,FR regrouped; all 10 R-items covered (ID-based check false alarm)
+A,10,Fable 5 (claude-fable-5),Fable 5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,no,FR split; all 10 R-items covered
