@@ -10,3 +10,5 @@ A,07,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,ins
 A,08,Fable 5 (claude-fable-5),Fable 5 (claude-fable-5),default,instructions/v1.0.0,7,7,,,,no,no,FR regrouped; all 10 R-items covered (ID-based check false alarm; run redone once)
 A,09,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,7,7,,,,no,no,FR regrouped; all 10 R-items covered (ID-based check false alarm)
 A,10,Fable 5 (claude-fable-5),Fable 5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,no,FR split; all 10 R-items covered
+B,01,claude-fable-5,claude-fable-5,default,instructions/v1.0.0,11,11,6,22,32,yes,no,pinned regeneration; trigger-expected +2 FR from R11/R12
+C,01,Claude Sonnet 5 (claude-sonnet-5),Claude Sonnet 5 (claude-sonnet-5),default,instructions/v1.0.0,6,6,6,20,20,yes,no,UNPINNED model; trigger-expected +2 FR from R11/R12
