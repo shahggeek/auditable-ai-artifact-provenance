@@ -1,0 +1,26 @@
+name: drift-gate
+on:
+  pull_request:
+    paths:
+      - "artifacts/SPEC_v*.md"
+jobs:
+  drift-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check changed SPECs against drift budget
+        run: |
+          set -e
+          base="origin/${{ github.base_ref }}"
+          git fetch origin "${{ github.base_ref }}"
+          for f in $(git diff --name-only "$base"...HEAD -- 'artifacts/SPEC_v*.md'); do
+            if git cat-file -e "$base:$f" 2>/dev/null; then
+              git show "$base:$f" > /tmp/old_spec.md
+              echo "== drift check: $f vs $base =="
+              bash tools/drift-check.sh /tmp/old_spec.md "$f"
+            else
+              echo "== $f is new; no prior version to compare =="
+            fi
+          done
