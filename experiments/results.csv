@@ -1,1 +1,2 @@
 experiment,run,model,model_version,temperature,skill_tag,fr_count,ifr_count,story_count,scenario_count,test_count,fr_coverage_ok,within_budget,notes
+baseline,0,claude-fable-5,claude-fable-5,default,instructions/v1.0.0,8,8,5,14,16,yes,n/a,single baseline pipeline run
