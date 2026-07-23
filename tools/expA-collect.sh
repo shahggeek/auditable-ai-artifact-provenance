@@ -14,6 +14,10 @@ fr=$(grep -c '^FR[0-9]*:' "$dest/SPEC.md" || true)
 ifr=$(grep -c '^IFR[0-9]*' "$dest/SPEC.md" || true)
 model=$(sed -n 's/^- Model: \(.*\)/\1/p' "$dest/SPEC.md" | head -1)
 echo "run-$n: FR=$fr IFR=$ifr model=$model"
+# Layer 2: log the generation event. Added after an audit of the harness found that
+# runs embedded Layer-1 metadata but were never written to the generation log.
+bash "$root/tools/log-generation.sh" spec-generator 1.0.0 "$model" "$model" default \
+  "experiments/A-pinned/run-$n/SPEC.md" "requirements/pet-store-requirements.md" >/dev/null
 if bash "$root/tools/drift-check.sh" "$base" "$dest/SPEC.md"; then wb="yes"; else wb="no"; fi
 missing=$(comm -23 <(grep -o '^FR[0-9]*' "$base" | sort -u) <(grep -o '^FR[0-9]*' "$dest/SPEC.md" | sort -u))
 [[ -z "$missing" ]] && cov="yes" || cov="no"

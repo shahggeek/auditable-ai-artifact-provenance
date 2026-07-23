@@ -23,6 +23,17 @@ sc=$(grep -c '^Scenario ' "$dest/SCENARIOS.md" || true)
 tc=$(grep -c '^TC[0-9]*' "$dest/TESTPLAN.md" || true)
 model=$(sed -n 's/^- Model: \(.*\)/\1/p' "$dest/SPEC.md" | head -1)
 echo "$exp: FR=$fr IFR=$ifr stories=$st scenarios=$sc tests=$tc model=$model"
+# Layer 2: log all four stage events. Added after an audit of the harness found that
+# runs embedded Layer-1 metadata but were never written to the generation log.
+reldest="${dest#"$root"/}"
+for stage in "spec-generator|SPEC.md|pet-store-requirements.md" \
+             "story-generator|STORIES.md|SPEC.md" \
+             "scenario-generator|SCENARIOS.md|STORIES.md" \
+             "test-generator|TESTPLAN.md|SCENARIOS.md"; do
+  IFS='|' read -r sk out inp <<< "$stage"
+  bash "$root/tools/log-generation.sh" "$sk" 1.0.0 "$model" "$model" default \
+    "$reldest/$out" "$reldest/$inp" >/dev/null
+done
 echo ""
 echo "=== blast radius vs baseline (changed lines / baseline lines) ==="
 for pair in "SPEC.md|artifacts/SPEC_v1.0.md" "STORIES.md|artifacts/stories/STORIES_v1.0.md" \
