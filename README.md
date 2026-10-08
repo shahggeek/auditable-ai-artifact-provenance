@@ -64,7 +64,7 @@ See [`experiments/README.md`](experiments/README.md) and the write-ups in [`expe
 
 Baseline generation and Experiments A, B, and C are complete; results and analyses are in `experiments/`.
 
-**Known gap:** the collection scripts used for Experiments A, B, and C never called the Layer-2 logger, so `.claude/generation-log/` currently holds only the 4 baseline-pipeline events, not the later experiment runs (those are recorded in `experiments/results.csv` and the saved output files instead, just not in the JSONL log). This was found by querying the log itself rather than assumed, is reported rather than backfilled, since reconstructing provenance after the fact isn't honest, and the harness has been fixed going forward (commit `a3515f0`).
+**Known gap:** the collection scripts used for Experiments A, B, and C never called the Layer-2 logger, so `.claude/generation-log/` currently holds only the 4 baseline-pipeline events, not the later experiment runs (those are recorded in `experiments/results.csv` and the saved output files instead, just not in the JSONL log). This was found by querying the log itself rather than assumed, is reported rather than backfilled, since reconstructing provenance after the fact isn't honest, and the harness has been fixed going forward (commit `07cace9`).
 
 ## License
 
