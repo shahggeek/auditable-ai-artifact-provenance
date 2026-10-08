@@ -6,7 +6,8 @@
 #   tools/generation-report.sh by-month <YYYY-MM> # all events in a month
 #   tools/generation-report.sh stats              # activity summary
 set -euo pipefail
-root="$(git rev-parse --show-toplevel)"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+root="$(cd "$script_dir/.." && pwd)"
 logs="$root/.provenance/generation-log"
 all() { cat "$logs"/*/generation.jsonl 2>/dev/null || true; }
 case "${1:-}" in

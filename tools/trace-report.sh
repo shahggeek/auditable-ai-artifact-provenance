@@ -5,7 +5,8 @@
 #   tools/trace-report.sh forward FR3          # everything that traces to FR3
 #   tools/trace-report.sh backward <file>      # which FRs a file traces to
 set -euo pipefail
-root="$(git rev-parse --show-toplevel)"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+root="$(cd "$script_dir/.." && pwd)"
 spec=$(ls "$root"/artifacts/SPEC_v*.md 2>/dev/null | sort -V | tail -1 || true)
 [[ -n "$spec" ]] || { echo "no SPEC found in artifacts/"; exit 1; }
 case "${1:-}" in
