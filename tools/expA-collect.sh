@@ -18,9 +18,27 @@ echo "run-$n: FR=$fr IFR=$ifr model=$model"
 # runs embedded Layer-1 metadata but were never written to the generation log.
 bash "$root/tools/log-generation.sh" spec-generator 1.0.0 "$model" "$model" default \
   "experiments/A-pinned/run-$n/SPEC.md" "requirements/pet-store-requirements.md" >/dev/null
-if bash "$root/tools/drift-check.sh" "$base" "$dest/SPEC.md"; then wb="yes"; else wb="no"; fi
-missing=$(comm -23 <(grep -o '^FR[0-9]*' "$base" | sort -u) <(grep -o '^FR[0-9]*' "$dest/SPEC.md" | sort -u))
-[[ -z "$missing" ]] && cov="yes" || cov="no"
-echo "A,$n,${model:-unknown},${model:-unknown},default,instructions/v1.0.0,$fr,$ifr,,,,$cov,$wb," >> "$root/experiments/results.csv"
+if bash "$root/tools/drift-check.sh" "$base" "$dest/SPEC.md"; then wb_v11="yes"; else wb_v11="no"; fi
+missing_source=$(comm -23 \
+  <(grep '^FR' "$base" | grep -o 'R[0-9][0-9]*' | sort -u) \
+  <(grep '^FR' "$dest/SPEC.md" | grep -o 'R[0-9][0-9]*' | sort -u))
+[[ -z "$missing_source" ]] && source_cov="yes" || source_cov="no"
+missing_fr=$(comm -23 \
+  <(grep -o '^FR[0-9]*' "$base" | sort -u) \
+  <(grep -o '^FR[0-9]*' "$dest/SPEC.md" | sort -u))
+[[ -z "$missing_fr" ]] && legacy_fr="yes" || legacy_fr="no"
+base_fr=$(grep -c '^FR[0-9]*:' "$base" || true)
+if [[ "$fr" -eq "$base_fr" && "$legacy_fr" == "yes" ]]; then wb_v10="yes"; else wb_v10="no"; fi
+csv_quote() { local value=${1//\"/\"\"}; printf '"%s"' "$value"; }
+{
+  printf 'A,%s,' "$n"
+  csv_quote "${model:-unknown}"
+  printf ','
+  csv_quote "${model:-unknown}"
+  printf ',default,instructions/v1.0.0,%s,%s,,,,%s,%s,%s,%s,' \
+    "$fr" "$ifr" "$source_cov" "$legacy_fr" "$wb_v10" "$wb_v11"
+  csv_quote "future run collected by expA-collect.sh"
+  printf '\n'
+} >> "$root/experiments/results.csv"
 rm -rf "$work"
 echo "collected -> $dest/SPEC.md ; results.csv updated ; workspace cleaned"

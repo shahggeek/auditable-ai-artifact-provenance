@@ -30,6 +30,6 @@ Same requirement change as B, but unpinned: a different model or model version, 
 
 ## Results
 
-Each run is one row in `results.csv`. Full analyses: [`A-pinned/ANALYSIS.md`](A-pinned/ANALYSIS.md) (Experiment A) and [`ANALYSIS-BC.md`](ANALYSIS-BC.md) (Experiments B and C).
+Each run is one valid CSV row in `results.csv`. The file distinguishes source-tag coverage from the legacy FR-number-continuity check that produced false alarms for runs A08 and A09. It also keeps the original v1.0 drift-budget verdict separate from the post-hoc v1.1 verdict; v1.1 was calibrated on Experiment A and therefore is not independent validation. Full analyses: [`A-pinned/ANALYSIS.md`](A-pinned/ANALYSIS.md) (Experiment A) and [`ANALYSIS-BC.md`](ANALYSIS-BC.md) (Experiments B and C).
 
 **Known gap:** the collection scripts for these experiments did not call the Layer-2 generation logger, so none of these runs are represented in `.provenance/generation-log/`, only in `results.csv` and the saved output files under each experiment's directory. The main [`README.md`](../README.md) Status section has the full explanation; it is not backfilled.

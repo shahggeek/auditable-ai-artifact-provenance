@@ -1,14 +1,14 @@
-experiment,run,model,model_version,temperature,skill_tag,fr_count,ifr_count,story_count,scenario_count,test_count,fr_coverage_ok,within_budget,notes
-baseline,0,claude-fable-5,claude-fable-5,default,instructions/v1.0.0,8,8,5,14,16,yes,n/a,single baseline pipeline run
-A,01,Claude Fable 5 (claude-fable-5),Claude Fable 5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,no,FR split; all 10 R-items covered
-A,02,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,matches baseline structure
-A,03,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,matches baseline structure
-A,04,Fable 5 (claude-fable-5),Fable 5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,matches baseline structure
-A,05,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,no,FR split; all 10 R-items covered
-A,06,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,no,FR split; all 10 R-items covered
-A,07,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,matches baseline structure
-A,08,Fable 5 (claude-fable-5),Fable 5 (claude-fable-5),default,instructions/v1.0.0,7,7,,,,no,no,FR regrouped; all 10 R-items covered (ID-based check false alarm; run redone once)
-A,09,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,7,7,,,,no,no,FR regrouped; all 10 R-items covered (ID-based check false alarm)
-A,10,Fable 5 (claude-fable-5),Fable 5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,no,FR split; all 10 R-items covered
-B,01,claude-fable-5,claude-fable-5,default,instructions/v1.0.0,11,11,6,22,32,yes,no,pinned; 12/12 reqs covered; 11 FR (0.92/req, within same-model band); trigger+noise, blast radius bounded
-C,01,Claude Sonnet 5 (claude-sonnet-5),Claude Sonnet 5 (claude-sonnet-5),default,instructions/v1.0.0,6,6,6,20,20,yes,no,UNPINNED; 12/12 reqs covered; 6 FR (0.50/req, FAR outside same-model band) — cross-model structural divergence ~2:1
+experiment,run,model,model_version,temperature,skill_tag,fr_count,ifr_count,story_count,scenario_count,test_count,source_tag_coverage_ok,legacy_fr_id_continuity_ok,within_budget_v1_0,within_budget_v1_1,notes
+baseline,0,claude-fable-5,claude-fable-5,default,instructions/v1.0.0,8,8,5,14,16,yes,yes,n/a,n/a,"single baseline pipeline run"
+A,01,Claude Fable 5 (claude-fable-5),Claude Fable 5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,yes,no,yes,"FR split; all 10 source R-items retained"
+A,02,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,yes,yes,"matches baseline structure"
+A,03,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,yes,yes,"matches baseline structure"
+A,04,Fable 5 (claude-fable-5),Fable 5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,yes,yes,"matches baseline structure"
+A,05,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,yes,no,yes,"FR split; all 10 source R-items retained"
+A,06,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,yes,no,yes,"FR split; all 10 source R-items retained"
+A,07,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,8,8,,,,yes,yes,yes,yes,"matches baseline structure"
+A,08,Fable 5 (claude-fable-5),Fable 5 (claude-fable-5),default,instructions/v1.0.0,7,7,,,,yes,no,no,yes,"FR regrouped; all 10 source R-items retained; legacy FR-ID check produced a false alarm; run repeated once"
+A,09,claude-fable-5 (claude-fable-5),claude-fable-5 (claude-fable-5),default,instructions/v1.0.0,7,7,,,,yes,no,no,yes,"FR regrouped; all 10 source R-items retained; legacy FR-ID check produced a false alarm"
+A,10,Fable 5 (claude-fable-5),Fable 5 (claude-fable-5),default,instructions/v1.0.0,9,9,,,,yes,yes,no,yes,"FR split; all 10 source R-items retained"
+B,01,claude-fable-5,claude-fable-5,default,instructions/v1.0.0,11,11,6,22,32,yes,n/a,no,no,"pinned; 12/12 source R-items retained; 11 FR (0.92/requirement, 0.02 above the observed 0.70-0.90 same-model band); single illustrative run"
+C,01,Claude Sonnet 5 (claude-sonnet-5),Claude Sonnet 5 (claude-sonnet-5),default,instructions/v1.0.0,6,6,6,20,20,yes,n/a,no,no,"unpinned; 12/12 source R-items retained; 6 FR (0.50/requirement, outside the observed same-model band); single illustrative cross-model run"

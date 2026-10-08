@@ -45,11 +45,24 @@ for pair in "SPEC.md|artifacts/SPEC_v1.0.md" "STORIES.md|artifacts/stories/STORI
 done
 echo ""
 echo "=== drift-check v1.1 (baseline SPEC vs regenerated SPEC) ==="
-if bash "$root/tools/drift-check.sh" "$root/artifacts/SPEC_v1.0.md" "$dest/SPEC.md"; then wb="yes"; else wb="no"; fi
-missing_r=$(comm -23 <(grep '^FR' "$root/artifacts/SPEC_v1.0.md" | grep -o 'R[0-9]*' | sort -u) \
-                     <(grep '^FR' "$dest/SPEC.md" | grep -o 'R[0-9]*' | sort -u))
-[[ -z "$missing_r" ]] && cov="yes" || cov="no"
-echo "$exp,01,${model:-unknown},${model:-unknown},default,instructions/v1.0.0,$fr,$ifr,$st,$sc,$tc,$cov,$wb,$note" >> "$root/experiments/results.csv"
+if bash "$root/tools/drift-check.sh" "$root/artifacts/SPEC_v1.0.md" "$dest/SPEC.md"; then wb_v11="yes"; else wb_v11="no"; fi
+missing_r=$(comm -23 \
+  <(grep -o 'R[0-9][0-9]*' "$dest/pet-store-requirements.md" | sort -u) \
+  <(grep '^FR' "$dest/SPEC.md" | grep -o 'R[0-9][0-9]*' | sort -u))
+[[ -z "$missing_r" ]] && source_cov="yes" || source_cov="no"
+base_fr=$(grep -c '^FR[0-9]*:' "$root/artifacts/SPEC_v1.0.md" || true)
+if [[ "$fr" -eq "$base_fr" ]]; then wb_v10="yes"; else wb_v10="no"; fi
+csv_quote() { local value=${1//\"/\"\"}; printf '"%s"' "$value"; }
+{
+  printf '%s,01,' "$exp"
+  csv_quote "${model:-unknown}"
+  printf ','
+  csv_quote "${model:-unknown}"
+  printf ',default,instructions/v1.0.0,%s,%s,%s,%s,%s,%s,n/a,%s,%s,' \
+    "$fr" "$ifr" "$st" "$sc" "$tc" "$source_cov" "$wb_v10" "$wb_v11"
+  csv_quote "$note"
+  printf '\n'
+} >> "$root/experiments/results.csv"
 rm -rf "$work"
 echo ""
 echo "collected -> $dest ; results.csv updated ; workspace cleaned"

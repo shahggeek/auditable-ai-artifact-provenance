@@ -7,7 +7,7 @@ When AI assistants generate SDLC artifacts (specifications, stories, scenarios, 
 ## Scope and evidence boundaries
 
 - The repository contains synthetic requirements, generated artifacts, retained experiment outputs, and analysis scripts.
-- It contains no company repositories, proprietary artifacts, workshop records, participant data, or confidential field data.
+- It contains no proprietary artifacts, participant data, or confidential field data.
 - Model names in the retained files are experimental metadata and are preserved as recorded.
 - The small experiments motivate a larger evaluation; they do not establish general model effects, regulatory compliance, or production readiness.
 - This repository identifies its maintainer. Keep it private during double-anonymous review and do not link it from the manuscript; use a separately anonymized submission snapshot.
@@ -22,6 +22,8 @@ When AI assistants generate SDLC artifacts (specifications, stories, scenarios, 
 | 4 | **Prompt (instruction-file) hashing**: skill content hashed; hash stored in artifacts and log as `prompt_hash` | `tools/prompt-hash.sh` |
 
 Layer 4 hashes the versioned instruction file itself, not the full assembled prompt sent to the model (user input, retrieved context, open files are not covered). Records are not signed or hash-chained; they carry ordinary Git/SCM protection, not cryptographic tamper evidence.
+
+The prototype implements only part of the candidate record. Artifact headers contain the declared model, instruction version, timestamp, input path, and instruction-file hash. The JSONL event log additionally records the output hash and repository context. Human-review status is proposed but is not recorded in the retained prototype artifacts.
 
 ## Traceability chain
 
@@ -64,9 +66,9 @@ Queries only return records for artifacts that reached the generation log, see S
 
 See [`experiments/README.md`](experiments/README.md) and the write-ups in [`experiments/A-pinned/ANALYSIS.md`](experiments/A-pinned/ANALYSIS.md) and [`experiments/ANALYSIS-BC.md`](experiments/ANALYSIS-BC.md): **A** — pinned regeneration ×10 (same-model structural variation); **B** — requirement change under pinned conditions (blast radius); **C** — unpinned contrast. Results in `experiments/results.csv`.
 
-## AI-BOM schema
+## AI-BOM schema and example
 
-[`schemas/ai-bom-schema.json`](schemas/ai-bom-schema.json) is an artifact-level provenance schema: an AI Bill of Materials keyed to a generated artifact rather than to a model, complementary to model-centric ML-BOMs.
+[`schemas/ai-bom-schema.json`](schemas/ai-bom-schema.json) is a formal JSON Schema for a proposed artifact-level AI Bill of Materials. [`schemas/ai-bom-example.json`](schemas/ai-bom-example.json) is an illustrative record with placeholder values; it is not an experimental observation.
 
 ## Status
 

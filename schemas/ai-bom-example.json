@@ -1,0 +1,25 @@
+{
+  "schema": "ai-bom/1.0",
+  "artifact": "artifacts/SPEC_v1.0.md",
+  "generated_at": "2026-06-30T12:00:00Z",
+  "input_identifiers": ["requirements/pet-store-requirements.md"],
+  "output_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "ai_components": [
+    {
+      "type": "model",
+      "name": "example-model",
+      "version": "example-version"
+    },
+    {
+      "type": "instruction",
+      "name": "spec-generator",
+      "version": "1.0.0",
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "human_review": {
+    "reviewer_id": "example-reviewer",
+    "status": "approved",
+    "date": "2026-06-30"
+  }
+}

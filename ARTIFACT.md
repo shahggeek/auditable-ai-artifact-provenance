@@ -17,7 +17,7 @@ This repository is a bounded proof of concept for recording and querying provena
 | `experiments/C-unpinned/` | One cross-model pipeline | Illustrative unpinned contrast |
 | `experiments/results.csv` | Derived experiment counts | Input to the reported descriptive summaries |
 | `tools/` | Logging, query, trace, collection, and drift scripts | Reproduces mechanical checks |
-| `schemas/` | Illustrative AI-BOM record | Shows the proposed record shape |
+| `schemas/` | AI-BOM JSON Schema and illustrative record | Defines and demonstrates the proposed record shape |
 
 ## Quick verification
 
@@ -38,6 +38,7 @@ The scripts require Bash, Git, `sed`, `grep`, `awk`, `sort`, and a SHA-256 imple
 - Requirement identifiers are mechanically present across the retained downstream baseline artifacts.
 - Retained regeneration outputs vary structurally even when the recorded model and instruction files are held fixed.
 - The logging gap demonstrates that developer-controlled provenance is incomplete when capture is not invoked.
+- The anonymous snapshot can exercise event queries, but identity-bearing repository and commit fields are redacted and Git history is absent, so the recorded commit cannot be resolved during review.
 
 ## Claims this artifact cannot support
 
@@ -46,7 +47,7 @@ The scripts require Bash, Git, `sed`, `grep`, `awk`, `sort`, and a SHA-256 imple
 - It does not provide cryptographic attestation, signed events, or tamper-evident storage.
 - It does not estimate a general causal effect of model choice; the cross-model comparison has one run per condition.
 - It does not demonstrate regulatory compliance or validate the framework in production.
-- It contains no workshop, participant, company, or confidential field data.
+- It contains no participant or confidential field data.
 
 ## Known provenance gap
 
