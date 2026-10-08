@@ -1,0 +1,9 @@
+{
+  "schema": "ai-bom/1.0",
+  "artifact": "SPEC_v1.0.md",
+  "ai_components": [
+    { "type": "model", "name": "claude-sonnet-4-6", "version": "claude-sonnet-4-6" },
+    { "type": "instruction", "name": "spec-generator", "version": "1.0.0", "hash": "sha256:abc12..." }
+  ],
+  "human_review": { "reviewer": "lead@example.com", "date": "2026-06-30" }
+}

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Drift budget check between two SPEC versions.  v1.1
-# Budget: (1) zero loss of SEMANTIC requirement coverage — every R-item traced
-#             in the old spec's [source: ...] tags must still be traced in the new;
+# Budget: (1) zero loss of source-tag requirement coverage: every R-item tagged
+#             in the old spec's [source: ...] tags must still be tagged in the new
+#             (tag presence only; this does not check that meaning is preserved);
 #         (2) IFR count within max(+/-BUDGET_ABS, +/-BUDGET_PCT%) of the old count.
 # FR-ID continuity is reported as informational only (regrouping is not loss).
 # v1.1 calibration derives from Experiment A (see experiments/A-pinned/ANALYSIS.md).
@@ -15,14 +16,14 @@ ifr_old=$(grep -c '^IFR[0-9]*' "$old" || true); ifr_new=$(grep -c '^IFR[0-9]*' "
 echo "FR count:  $fr_old -> $fr_new"
 echo "IFR count: $ifr_old -> $ifr_new"
 fail=0
-# (1) semantic requirement coverage via [source: Rn] tags
+# (1) source-tag requirement coverage via [source: Rn] tags
 rtags() { grep '^FR[0-9]*:' "$1" | grep -o '\[source:[^]]*\]' | grep -o 'R[0-9]*' | sort -u; }
 missing_r=$(comm -23 <(rtags "$old") <(rtags "$new"))
 if [[ -n "$missing_r" ]]; then
-  echo "BUDGET BREACH: semantic requirement coverage lost -> $(echo $missing_r | tr '\n' ' ')"
+  echo "BUDGET BREACH: source-tag requirement coverage lost -> $(echo $missing_r | tr '\n' ' ')"
   fail=1
 else
-  echo "semantic requirement coverage: preserved (all source R-items still traced)"
+  echo "source-tag requirement coverage: preserved (all source R-item tags still present)"
 fi
 # informational: FR-ID continuity (regrouping detection, not a failure)
 missing_id=$(comm -23 <(grep -o '^FR[0-9]*' "$old" | sort -u) <(grep -o '^FR[0-9]*' "$new" | sort -u))
