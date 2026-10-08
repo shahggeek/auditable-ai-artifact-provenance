@@ -10,7 +10,7 @@ When AI assistants generate SDLC artifacts (specifications, stories, scenarios, 
 - It contains no company repositories, proprietary artifacts, workshop records, participant data, or confidential field data.
 - Model names in the retained files are experimental metadata and are preserved as recorded.
 - The small experiments motivate a larger evaluation; they do not establish general model effects, regulatory compliance, or production readiness.
-- This public repository identifies its maintainer. Do not link it from a double-anonymous manuscript; use a separately anonymized submission snapshot.
+- This repository identifies its maintainer. Keep it private during double-anonymous review and do not link it from the manuscript; use a separately anonymized submission snapshot.
 
 ## The four layers
 

@@ -54,4 +54,4 @@ The four baseline pipeline events were logged, but the retained A/B/C experiment
 
 ## Double-anonymous submission
 
-This public repository identifies its maintainer through its account and license. It must not be linked from a double-anonymous manuscript. Prepare a separate snapshot with author-identifying metadata removed and submit that snapshot through the venue's supplementary-material mechanism.
+This repository identifies its maintainer through its account and license. Keep it private during double-anonymous review and do not link it from the manuscript. Use a separate snapshot with author-identifying metadata removed through the venue's supplementary-material mechanism.
