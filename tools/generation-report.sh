@@ -7,7 +7,7 @@
 #   tools/generation-report.sh stats              # activity summary
 set -euo pipefail
 root="$(git rev-parse --show-toplevel)"
-logs="$root/.claude/generation-log"
+logs="$root/.provenance/generation-log"
 all() { cat "$logs"/*/generation.jsonl 2>/dev/null || true; }
 case "${1:-}" in
   by-file)  all | grep -F "\"output_file\":\"${2:?path}\"" || echo "no events for $2" ;;

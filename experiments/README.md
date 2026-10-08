@@ -32,4 +32,4 @@ Same requirement change as B, but unpinned: a different model or model version, 
 
 Each run is one row in `results.csv`. Full analyses: [`A-pinned/ANALYSIS.md`](A-pinned/ANALYSIS.md) (Experiment A) and [`ANALYSIS-BC.md`](ANALYSIS-BC.md) (Experiments B and C).
 
-**Known gap:** the collection scripts for these experiments did not call the Layer-2 generation logger, so none of these runs are represented in `.claude/generation-log/`, only in `results.csv` and the saved output files under each experiment's directory. The main [`README.md`](../README.md) Status section has the full explanation; it is not backfilled.
+**Known gap:** the collection scripts for these experiments did not call the Layer-2 generation logger, so none of these runs are represented in `.provenance/generation-log/`, only in `results.csv` and the saved output files under each experiment's directory. The main [`README.md`](../README.md) Status section has the full explanation; it is not backfilled.

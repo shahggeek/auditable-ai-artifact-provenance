@@ -1,15 +1,23 @@
-# ai-provenance-kit
+# Auditable AI Artifact Provenance
 
-A proof-of-concept implementation of a **provenance and traceability framework for AI-generated code and development artifacts**, demonstrated on a pet-store application built with Spec-Driven Development (SDD).
+A research prototype and supplementary artifact for studying **provenance, traceability, and controlled regeneration of AI-generated software-development artifacts**. The proof of concept uses a synthetic pet-store example and a specification-driven development pipeline.
 
-When AI assistants generate SDLC artifacts (specs, stories, scenarios, tests), regulated teams need to answer: *what generated this artifact, under which instructions, which requirement does it satisfy, who approved it — and can you prove it?* This kit implements the four provenance layers, the FR→IFR traceability chain, and machine-checkable **drift budgets** that make those questions answerable for the artifacts it does log (see Status below).
+When AI assistants generate SDLC artifacts (specifications, stories, scenarios, and tests), reviewers may need to answer: *what generated this artifact, under which recorded instructions, which requirement does it address, and who reviewed it?* This prototype implements four provenance mechanisms, an FR-to-IFR traceability chain, and experimental drift checks. It demonstrates what can be queried from recorded evidence; it does not prove that the records are complete, truthful, or tamper-resistant.
+
+## Scope and evidence boundaries
+
+- The repository contains synthetic requirements, generated artifacts, retained experiment outputs, and analysis scripts.
+- It contains no company repositories, proprietary artifacts, workshop records, participant data, or confidential field data.
+- Model names in the retained files are experimental metadata and are preserved as recorded.
+- The small experiments motivate a larger evaluation; they do not establish general model effects, regulatory compliance, or production readiness.
+- This public repository identifies its maintainer. Do not link it from a double-anonymous manuscript; use a separately anonymized submission snapshot.
 
 ## The four layers
 
 | Layer | Mechanism | In this repo |
 |---|---|---|
 | 1 | **Artifact metadata** — every generated file carries a generation-metadata header | `artifacts/*` headers |
-| 2 | **Generation log** — machine-readable JSONL record of generation events | `.claude/generation-log/`, `tools/log-generation.sh` |
+| 2 | **Generation log** — machine-readable JSONL record of generation events | `.provenance/generation-log/`, `tools/log-generation.sh` |
 | 3 | **Versioned instruction packages** — skills git-tagged as a complete set | `skills/`, tags `instructions/vX.Y.Z` |
 | 4 | **Prompt (instruction-file) hashing**: skill content hashed; hash stored in artifacts and log as `prompt_hash` | `tools/prompt-hash.sh` |
 
@@ -64,7 +72,24 @@ See [`experiments/README.md`](experiments/README.md) and the write-ups in [`expe
 
 Baseline generation and Experiments A, B, and C are complete; results and analyses are in `experiments/`.
 
-**Known gap:** the collection scripts used for Experiments A, B, and C never called the Layer-2 logger, so `.claude/generation-log/` currently holds only the 4 baseline-pipeline events, not the later experiment runs (those are recorded in `experiments/results.csv` and the saved output files instead, just not in the JSONL log). This was found by querying the log itself rather than assumed, is reported rather than backfilled, since reconstructing provenance after the fact isn't honest, and the harness has been fixed going forward (commit `07cace9`).
+**Known gap:** the collection scripts used for Experiments A, B, and C never called the Layer-2 logger, so `.provenance/generation-log/` currently holds only the four baseline-pipeline events, not the later experiment runs. Those runs are recorded in `experiments/results.csv` and the retained output files. The missing events are reported rather than reconstructed after the fact; the collection harness now invokes the logger for future runs.
+
+## Verify the retained artifact
+
+The scripts require Bash, Git, and common POSIX command-line utilities. From the repository root:
+
+```bash
+tools/generation-report.sh stats
+tools/generation-report.sh by-file artifacts/SPEC_v1.0.md
+tools/trace-report.sh coverage
+tools/drift-check.sh artifacts/SPEC_v1.0.md experiments/A-pinned/run-02/SPEC.md
+```
+
+Expected high-level results are four logged baseline events, full identifier presence across the retained baseline chain, and a passing drift check for the selected pinned-regeneration example. See [ARTIFACT.md](ARTIFACT.md) for the evidence inventory and limitations.
+
+## Citation
+
+Citation metadata is provided in [CITATION.cff](CITATION.cff). The associated research-preview citation will be added after publication.
 
 ## License
 

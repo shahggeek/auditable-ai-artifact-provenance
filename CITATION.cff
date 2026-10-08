@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this research artifact, please cite it using the metadata below."
+title: "Auditable AI Artifact Provenance: Research Prototype and Supplementary Materials"
+type: software
+authors:
+  - family-names: Shah
+    given-names: Gaurav
+repository-code: "https://github.com/shahggeek/auditable-ai-artifact-provenance"
+url: "https://github.com/shahggeek/auditable-ai-artifact-provenance"
+license: MIT
+version: 0.1.0
+date-released: 2026-10-07
+abstract: "A research prototype for studying provenance, traceability, and controlled regeneration of AI-generated software-development artifacts."
+keywords:
+  - software engineering
+  - artificial intelligence
+  - provenance
+  - traceability
+  - reproducibility

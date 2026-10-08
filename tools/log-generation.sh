@@ -7,7 +7,7 @@ temp="${5:?temperature}"; out="${6:?output_file}"; input="${7:?input}"
 root="$(git rev-parse --show-toplevel)"
 ph=$("$root/tools/prompt-hash.sh" "$root/skills/$skill/SKILL.md")
 oh="sha256:$(shasum -a 256 "$root/$out" | cut -d' ' -f1)"
-dir="$root/.claude/generation-log/$(date -u +%Y-%m)"
+dir="$root/.provenance/generation-log/$(date -u +%Y-%m)"
 mkdir -p "$dir"
 printf '{"timestamp":"%s","skill":"%s","skill_version":"%s","skill_commit":"%s","prompt_hash":"%s","model":"%s","model_version":"%s","temperature":"%s","output_file":"%s","output_hash":"%s","user":"%s","repo":"%s","branch":"%s","input":"%s"}\n' \
   "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$skill" "$ver" "$(git rev-parse --short HEAD)" "$ph" \
