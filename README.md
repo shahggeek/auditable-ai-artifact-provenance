@@ -33,7 +33,7 @@ The **interpreted functional requirement (IFR)** makes the AI's reading of each 
 
 ## Drift budget
 
-Regenerating an artifact from the same inputs is checked against a drift budget: source-requirement tag coverage (every `[source: Rn]` tag still traced) as an absolute floor, plus a size-normalized count band. This replaced an earlier, naive ±10% IFR-count version that false-flagged legitimate FR regrouping at small counts (see Experiment A below); the current version was calibrated on those same ten runs and is offered for validation, not as a settled threshold. `.github/workflows/drift-gate.yml` runs it as a CI gate on spec changes.
+Regenerating an artifact from the same inputs is checked against a drift budget: source-requirement tag coverage (every `[source: Rn]` tag still traced) as an absolute floor, plus a size-normalized count band. This replaced an earlier, naive ±10% IFR-count version that false-flagged legitimate FR regrouping at small counts (see Experiment A below); the current version was calibrated on those same ten runs and is offered for validation, not as a settled threshold. The checker rejects empty or malformed specifications before evaluating the budget. `.github/workflows/drift-gate.yml` compares edited files with their base-branch versions and new versioned files with the latest SPEC version on the base branch.
 
 ## Pipeline
 
@@ -64,7 +64,7 @@ Queries only return records for artifacts that reached the generation log, see S
 
 ## Experiments
 
-See [`experiments/README.md`](experiments/README.md) and the write-ups in [`experiments/A-pinned/ANALYSIS.md`](experiments/A-pinned/ANALYSIS.md) and [`experiments/ANALYSIS-BC.md`](experiments/ANALYSIS-BC.md): **A** — pinned regeneration ×10 (same-model structural variation); **B** — requirement change under pinned conditions (blast radius); **C** — unpinned contrast. Results in `experiments/results.csv`.
+See [`experiments/README.md`](experiments/README.md) and the write-ups in [`experiments/A-pinned/ANALYSIS.md`](experiments/A-pinned/ANALYSIS.md) and [`experiments/ANALYSIS-BC.md`](experiments/ANALYSIS-BC.md): **A** has ten retained regenerations sharing the same declared inputs, instruction-file hash, and recorded model identifier; **B** changes the requirements while requesting the baseline identifier; **C** uses the same changed requirements while requesting a different identifier. These are descriptive observations, not authenticated provider-version comparisons or causal estimates. Results are in `experiments/results.csv`.
 
 ## AI-BOM schema and example
 
@@ -78,16 +78,17 @@ Baseline generation and Experiments A, B, and C are complete; results and analys
 
 ## Verify the retained artifact
 
-The scripts require Bash, Git, and common POSIX command-line utilities. From the repository root:
+The scripts require Bash, Git, Python 3, and common POSIX command-line utilities. From the repository root:
 
 ```bash
 tools/generation-report.sh stats
 tools/generation-report.sh by-file artifacts/SPEC_v1.0.md
 tools/trace-report.sh coverage
 tools/drift-check.sh artifacts/SPEC_v1.0.md experiments/A-pinned/run-02/SPEC.md
+tools/test-tools.sh
 ```
 
-Expected high-level results are four logged baseline events, full identifier presence across the retained baseline chain, and a passing drift check for the selected pinned-regeneration example. See [ARTIFACT.md](ARTIFACT.md) for the evidence inventory and limitations.
+Expected high-level results are four logged baseline events, full identifier presence across the retained baseline chain, a passing drift check for the selected same-recorded-conditions example, and passing regression checks for malformed-input rejection, source-tag parsing, and JSON serialization. See [ARTIFACT.md](ARTIFACT.md) for the evidence inventory and limitations.
 
 ## Citation
 

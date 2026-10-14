@@ -4,8 +4,10 @@
 # Usage: tools/expBC-prepare.sh B   |   tools/expBC-prepare.sh C
 set -euo pipefail
 exp="${1:?B or C}"; [[ "$exp" == "B" || "$exp" == "C" ]] || { echo "arg must be B or C"; exit 1; }
-root="$(git rev-parse --show-toplevel)"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+root="$(cd "$script_dir/.." && pwd)"
 work="/tmp/exp${exp}-run"
+tag="instructions/v1.0.0"
 rm -rf "$work"; mkdir -p "$work/skills"
 # Build requirements v1.1: baseline R1-R10 plus R11/R12 promoted from the comment block
 python3 - "$root/requirements/pet-store-requirements.md" "$work/pet-store-requirements.md" <<'EOF'
@@ -19,12 +21,28 @@ t = t.replace("Business Requirements v1.0", "Business Requirements v1.1")
 t += "\n" + "\n".join(extras) + "\n"
 open(dst, "w").write(t)
 EOF
-for s in spec story scenario test; do cp "$root/skills/${s}-generator/SKILL.md" "$work/skills/${s}-generator-SKILL.md"; done
-h() { bash "$root/tools/prompt-hash.sh" "$root/skills/$1-generator/SKILL.md"; }
+for s in spec story scenario test; do
+  target="$work/skills/${s}-generator-SKILL.md"
+  if git -C "$root" rev-parse --verify "$tag^{commit}" >/dev/null 2>&1; then
+    git -C "$root" show "$tag:skills/${s}-generator/SKILL.md" > "$target"
+  else
+    cp "$root/skills/${s}-generator/SKILL.md" "$target"
+    declared=$(sed -n 's/^prompt_hash: //p' "$target" | head -1)
+    actual=$(bash "$root/tools/prompt-hash.sh" "$target")
+    [[ -n "$declared" && "$declared" == "$actual" ]] || {
+      echo "ERROR: packaged ${s}-generator instruction file does not match its declared hash" >&2
+      exit 1
+    }
+  fi
+done
+if ! git -C "$root" rev-parse --verify "$tag^{commit}" >/dev/null 2>&1; then
+  echo "NOTE: Git tag history is unavailable; using packaged instruction files after hash verification." >&2
+fi
+h() { bash "$root/tools/prompt-hash.sh" "$work/skills/$1-generator-SKILL.md"; }
 if [[ "$exp" == "B" ]]; then
-  model_line="claude --model claude-fable-5     # PINNED: must match baseline/Experiment A"
+  model_line="claude --model claude-fable-5     # request the baseline/Experiment A model identifier"
 else
-  model_line="claude --model claude-sonnet-5    # UNPINNED: any model EXCEPT claude-fable-5; keep a note of which"
+  model_line="claude --model claude-sonnet-5    # request an identifier different from claude-fable-5; record it"
 fi
 cat <<EOT
 

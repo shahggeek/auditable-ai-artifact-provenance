@@ -1,31 +1,31 @@
 # Experiments
 
-Protocol for the regeneration-drift experiments. All runs use the pinned instruction package tag `instructions/v1.0.0` unless stated otherwise, and every run records in its artifact header the model as reported by the model, the temperature setting (`default`; not exposed by the tool), and the instruction-file (prompt) hash. No dated model version string was available for these runs, so `model_version` in `results.csv` repeats the reported model name; the reported name varies in spelling across runs, while the parenthetical model ID (e.g., `claude-fable-5`) is stable. See Results below for a known gap on the generation-log side of this (the JSONL log, not the per-artifact header).
+Protocol for the regeneration-drift experiments. All retained runs record the instruction package tag `instructions/v1.0.0`, an instruction-file hash, a model declaration, and the tool's unexposed `default` temperature in the artifact header. The historical files do not independently authenticate that the tagged instruction checkout was used at execution time or which provider-side model revision was served. Current preparation scripts now extract instruction files directly from the recorded tag and collectors verify their hashes before accepting future outputs. No dated model-version string was available for the retained runs, so the historical `model_version` column repeats the reported model field and is not separate version evidence.
 
 ## A — Pinned regeneration (×10)
 
-Same inputs, same skill tag, same model + model version, same temperature. Regenerate `SPEC` 10 times from `requirements/pet-store-requirements.md` (baseline v1.0 requirements).
+Same declared inputs, same recorded instruction-file hash, same requested and recorded model identifier, and the tool's unexposed default temperature. Regenerate `SPEC` 10 times from `requirements/pet-store-requirements.md` (baseline v1.0 requirements).
 
 - Save each run to `experiments/A-pinned/run-NN/SPEC.md`
 - Record per run: FR count, IFR count, FR id set
-- Question: does pinned regeneration stay within the drift budget (source-requirement tag coverage, size-normalized count band)?
+- Question: what structural variation appears across runs sharing the same recorded conditions, and how does the proposed drift check classify it?
 - **Completed.** 10 runs retained: FR/IFR counts 9, 8, 8, 8, 9, 9, 8, 7, 7, 9 (runs 01 to 10; median 8). Run 08 was repeated once: the run saved under `A-pinned/run-08/` is the retained one, the original attempt was not preserved, and the reason for the rerun was not recorded. The series is therefore ten retained outputs, including this one replacement. See `A-pinned/ANALYSIS.md` for the full write-up.
 
-## B — Requirement change under pinned conditions
+## B: Requirement change with the baseline model identifier
 
-Uncomment R11 and R12 in the requirements file (sold-out labeling; duplicate-order prevention). Regenerate the full pipeline (SPEC → stories → scenarios → tests) under pinned conditions.
+Uncomment R11 and R12 in the requirements file (sold-out labeling; duplicate-order prevention). Regenerate the full pipeline (SPEC → stories → scenarios → tests) while requesting the baseline model identifier and using the recorded instruction files.
 
 - Save to `experiments/B-req-change/`
 - Measure blast radius precisely: artifacts changed, FR/IFR/story/scenario/TC counts before → after, files touched
 - Expected drift (the 2 new requirements) is separated from unrequested drift
 - **Completed**, 1 run. See `ANALYSIS-BC.md`.
 
-## C — Unpinned contrast
+## C: Changed model-identifier contrast
 
-Same requirement change as B, but unpinned: a different model or model version, no skill tag checkout (current HEAD), temperature unrecorded.
+Same requirement change as B, but with a different requested and recorded model identifier. The retained headers record the same instruction-file hashes and `default` temperature. Historical execution did not independently authenticate the provider-served model revision or tagged checkout.
 
 - Save to `experiments/C-unpinned/`
-- Compare drift vs. Experiment B: does removing provenance-guided pinning increase drift?
+- Descriptively compare the retained structures with Experiment B; one run per identifier cannot estimate a causal model effect.
 - **Completed**, 1 run, so this is one illustrative comparison, not a general model-effect estimate. See `ANALYSIS-BC.md`.
 
 ## Results

@@ -15,12 +15,20 @@ jobs:
           set -e
           base="origin/${{ github.base_ref }}"
           git fetch origin "${{ github.base_ref }}"
-          for f in $(git diff --name-only "$base"...HEAD -- 'artifacts/SPEC_v*.md'); do
+          git diff --name-only "$base"...HEAD -- 'artifacts/SPEC_v*.md' | while IFS= read -r f; do
+            [ -n "$f" ] || continue
             if git cat-file -e "$base:$f" 2>/dev/null; then
               git show "$base:$f" > /tmp/old_spec.md
               echo "== drift check: $f vs $base =="
               bash tools/drift-check.sh /tmp/old_spec.md "$f"
             else
-              echo "== $f is new; no prior version to compare =="
+              prior=$(git ls-tree -r --name-only "$base" -- 'artifacts/SPEC_v*.md' | sort -V | tail -1)
+              if [ -z "$prior" ]; then
+                echo "ERROR: $f is new and the base branch contains no prior SPEC version" >&2
+                exit 1
+              fi
+              git show "$base:$prior" > /tmp/old_spec.md
+              echo "== drift check: new $f vs latest base version $prior =="
+              bash tools/drift-check.sh /tmp/old_spec.md "$f"
             fi
           done

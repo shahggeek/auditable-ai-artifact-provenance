@@ -11,13 +11,35 @@
 set -euo pipefail
 old="${1:?old spec}"; new="${2:?new spec}"
 pct="${BUDGET_PCT:-10}"; abs="${BUDGET_ABS:-1}"
+[[ -f "$old" && -s "$old" ]] || { echo "ERROR: old spec is missing or empty: $old" >&2; exit 2; }
+[[ -f "$new" && -s "$new" ]] || { echo "ERROR: new spec is missing or empty: $new" >&2; exit 2; }
+[[ "$pct" =~ ^[0-9]+$ && "$abs" =~ ^[0-9]+$ ]] || {
+  echo "ERROR: BUDGET_PCT and BUDGET_ABS must be non-negative integers" >&2
+  exit 2
+}
+
+validate_spec() {
+  local label="$1" file="$2" fr_count ifr_count bad_source
+  fr_count=$(grep -Ec '^FR[0-9]+:' "$file" || true)
+  ifr_count=$(grep -Ec '^IFR[0-9]+([[:space:]]|:|\()' "$file" || true)
+  [[ "$fr_count" -gt 0 ]] || { echo "ERROR: $label spec has no valid FR records" >&2; return 1; }
+  [[ "$ifr_count" -gt 0 ]] || { echo "ERROR: $label spec has no valid IFR records" >&2; return 1; }
+  bad_source=$(grep -E '^FR[0-9]+:' "$file" | grep -Evc '\[source:[[:space:]]*R[0-9]+([[:space:]]*,[[:space:]]*R[0-9]+)*[[:space:]]*\][[:space:]]*$' || true)
+  [[ "$bad_source" -eq 0 ]] || {
+    echo "ERROR: $label spec has $bad_source FR record(s) with a missing or malformed [source: ...] tag" >&2
+    return 1
+  }
+}
+
+validate_spec old "$old" || exit 2
+validate_spec new "$new" || exit 2
 fr_old=$(grep -c '^FR[0-9]*:' "$old" || true); fr_new=$(grep -c '^FR[0-9]*:' "$new" || true)
 ifr_old=$(grep -c '^IFR[0-9]*' "$old" || true); ifr_new=$(grep -c '^IFR[0-9]*' "$new" || true)
 echo "FR count:  $fr_old -> $fr_new"
 echo "IFR count: $ifr_old -> $ifr_new"
 fail=0
 # (1) source-tag requirement coverage via [source: Rn] tags
-rtags() { grep '^FR[0-9]*:' "$1" | grep -o '\[source:[^]]*\]' | grep -o 'R[0-9]*' | sort -u; }
+rtags() { grep -E '^FR[0-9]+:' "$1" | grep -Eo '\[source:[^]]*\]' | grep -Eo 'R[0-9]+' | sort -u; }
 missing_r=$(comm -23 <(rtags "$old") <(rtags "$new"))
 if [[ -n "$missing_r" ]]; then
   echo "BUDGET BREACH: source-tag requirement coverage lost -> $(echo $missing_r | tr '\n' ' ')"
