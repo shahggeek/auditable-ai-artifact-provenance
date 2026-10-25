@@ -1,6 +1,6 @@
 # Experiment A — Analysis
 
-**Protocol:** 10 retained regenerations of the specification from identical declared inputs: the same requirements (R1-R10), the same recorded instruction-file hash (`bc1930c7...`), the same requested and recorded model identifier (`claude-fable-5`), and the tool's unexposed default temperature. Each retained run came from a fresh session with an isolated two-file workspace and no access to prior outputs. The provider-served model revision and numeric temperature were not independently verifiable. Baseline: `artifacts/SPEC_v1.0.md` (8 FR / 8 IFR).
+**Protocol:** 10 retained regenerations of the specification from identical declared inputs: the same requirements (R1-R10), the same recorded instruction-body hash (`bc1930c7...`), the same requested and recorded model identifier (`claude-fable-5`), and the tool's unexposed default temperature. Each retained run came from a fresh session with an isolated two-file workspace and no access to prior outputs. The provider-served model revision and numeric temperature were not independently verifiable. Baseline: `artifacts/SPEC_v1.0.md` (8 FR / 8 IFR).
 
 ## Results
 
@@ -16,7 +16,7 @@
 
 ## Findings
 
-1. **Structural variation under the same recorded conditions.** Ten retained runs with identical declared inputs, the same recorded instruction-file hash, and the same requested and recorded model identifier produced three distinct FR counts (7, 8, or 9), five ordered source-grouping patterns, and four grouping partitions when FR order is ignored. These records do not authenticate the provider-served model revision.
+1. **Structural variation under the same recorded conditions.** Ten retained runs with identical declared inputs, the same recorded instruction-body hash, and the same requested and recorded model identifier produced three distinct FR counts (7, 8, or 9), five ordered source-grouping patterns, and four grouping partitions when FR order is ignored. These records do not authenticate the provider-served model revision.
 2. **Source-tag coverage was stable in every run.** All 10 runs retained every R-item's `[source: Rn]` tag in some functional requirement. The drift was *structural regrouping* (splitting or merging FRs), not identifier loss. This checks tag presence, not meaning: whether each regrouping preserved the requirement's meaning was not adjudicated.
 3. **The v1.0 drift budget was miscalibrated — in two instructive ways.**
    - A ±10% *percentage* budget at a count of 8 allows zero integer variation, so any structural difference breached it (6/10 runs). Percentage budgets need an absolute floor at small artifact counts.

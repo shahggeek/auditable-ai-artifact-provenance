@@ -1,10 +1,10 @@
 # Experiments
 
-Protocol for the regeneration-drift experiments. All retained runs record the instruction package tag `instructions/v1.0.0`, an instruction-file hash, a model declaration, and the tool's unexposed `default` temperature in the artifact header. The historical files do not independently authenticate that the tagged instruction checkout was used at execution time or which provider-side model revision was served. Current preparation scripts now extract instruction files directly from the recorded tag and collectors verify their hashes before accepting future outputs. No dated model-version string was available for the retained runs, so the historical `model_version` column repeats the reported model field and is not separate version evidence.
+Protocol for the regeneration-drift experiments. All retained runs record the instruction package tag `instructions/v1.0.0`, an instruction-body hash, a model declaration, and the tool's unexposed `default` temperature in the artifact header. The historical files do not independently authenticate that the tagged instruction checkout was used at execution time or which provider-side model revision was served. Current preparation scripts now extract instruction files directly from the recorded tag and collectors verify their hashes before accepting future outputs. No dated model-version string was available for the retained runs, so the historical `model_version` column repeats the reported model field and is not separate version evidence.
 
 ## A — Pinned regeneration (×10)
 
-Same declared inputs, same recorded instruction-file hash, same requested and recorded model identifier, and the tool's unexposed default temperature. Regenerate `SPEC` 10 times from `requirements/pet-store-requirements.md` (baseline v1.0 requirements).
+Same declared inputs, same recorded instruction-body hash, same requested and recorded model identifier, and the tool's unexposed default temperature. Regenerate `SPEC` 10 times from `requirements/pet-store-requirements.md` (baseline v1.0 requirements).
 
 - Save each run to `experiments/A-pinned/run-NN/SPEC.md`
 - Record per run: FR count, IFR count, FR id set
@@ -22,7 +22,7 @@ Uncomment R11 and R12 in the requirements file (sold-out labeling; duplicate-ord
 
 ## C: Changed model-identifier contrast
 
-Same requirement change as B, but with a different requested and recorded model identifier. The retained headers record the same instruction-file hashes and `default` temperature. Historical execution did not independently authenticate the provider-served model revision or tagged checkout.
+Same requirement change as B, but with a different requested and recorded model identifier. The retained headers record the same instruction-body hashes and `default` temperature. Historical execution did not independently authenticate the provider-served model revision or tagged checkout.
 
 - Save to `experiments/C-unpinned/`
 - Descriptively compare the retained structures with Experiment B; one run per identifier cannot estimate a causal model effect.

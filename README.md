@@ -19,11 +19,11 @@ When AI assistants generate SDLC artifacts (specifications, stories, scenarios, 
 | 1 | **Artifact metadata** — every generated file carries a generation-metadata header | `artifacts/*` headers |
 | 2 | **Generation log** — machine-readable JSONL record of generation events | `.provenance/generation-log/`, `tools/log-generation.sh` |
 | 3 | **Versioned instruction packages** — skills git-tagged as a complete set | `skills/`, tags `instructions/vX.Y.Z` |
-| 4 | **Prompt (instruction-file) hashing**: skill content hashed; hash stored in artifacts and log as `prompt_hash` | `tools/prompt-hash.sh` |
+| 4 | **Prompt (instruction-body) hashing**: skill content hashed; hash stored in artifacts and log as `prompt_hash` | `tools/prompt-hash.sh` |
 
-Layer 4 hashes the versioned instruction file itself, not the full assembled prompt sent to the model (user input, retrieved context, open files are not covered). Records are not signed or hash-chained; they carry ordinary Git/SCM protection, not cryptographic tamper evidence.
+Layer 4 hashes the extracted instruction body, not the complete file or assembled prompt. The historical extraction skips YAML frontmatter through the second standalone `---` line, skips any further standalone `---` lines, and emits the remaining lines with newline terminators before SHA-256 hashing. YAML metadata, user input, retrieved context, and open files are not covered. The historical `prompt_hash` field name is retained; its value is an instruction-body hash, not a full-prompt commitment. Records are not signed or hash-chained; they carry ordinary Git/SCM protection, not cryptographic tamper evidence.
 
-The prototype implements only part of the candidate record. Artifact headers contain the declared model, instruction version, timestamp, input path, and instruction-file hash. The JSONL event log additionally records the output hash and repository context. Human-review status is proposed but is not recorded in the retained prototype artifacts.
+The prototype implements only part of the candidate record. Artifact headers contain the declared model, instruction version, timestamp, input path, and instruction-body hash. The JSONL event log additionally records the output hash and repository context. Human-review status is proposed but is not recorded in the retained prototype artifacts.
 
 ## Traceability chain
 
@@ -64,7 +64,7 @@ Queries only return records for artifacts that reached the generation log, see S
 
 ## Experiments
 
-See [`experiments/README.md`](experiments/README.md) and the write-ups in [`experiments/A-pinned/ANALYSIS.md`](experiments/A-pinned/ANALYSIS.md) and [`experiments/ANALYSIS-BC.md`](experiments/ANALYSIS-BC.md): **A** has ten retained regenerations sharing the same declared inputs, instruction-file hash, and recorded model identifier; **B** changes the requirements while requesting the baseline identifier; **C** uses the same changed requirements while requesting a different identifier. These are descriptive observations, not authenticated provider-version comparisons or causal estimates. Results are in `experiments/results.csv`.
+See [`experiments/README.md`](experiments/README.md) and the write-ups in [`experiments/A-pinned/ANALYSIS.md`](experiments/A-pinned/ANALYSIS.md) and [`experiments/ANALYSIS-BC.md`](experiments/ANALYSIS-BC.md): **A** has ten retained regenerations sharing the same declared inputs, instruction-body hash, and recorded model identifier; **B** changes the requirements while requesting the baseline identifier; **C** uses the same changed requirements while requesting a different identifier. These are descriptive observations, not authenticated provider-version comparisons or causal estimates. Results are in `experiments/results.csv`.
 
 ## AI-BOM schema and example
 
@@ -86,6 +86,7 @@ tools/generation-report.sh by-file artifacts/SPEC_v1.0.md
 tools/trace-report.sh coverage
 tools/drift-check.sh artifacts/SPEC_v1.0.md experiments/A-pinned/run-02/SPEC.md
 tools/test-tools.sh
+python3 tools/test-drift-gate.py
 ```
 
 Expected high-level results are four logged baseline events, full identifier presence across the retained baseline chain, a passing drift check for the selected same-recorded-conditions example, and passing regression checks for malformed-input rejection, source-tag parsing, and JSON serialization. See [ARTIFACT.md](ARTIFACT.md) for the evidence inventory and limitations.
@@ -97,3 +98,5 @@ Citation metadata is provided in [CITATION.cff](CITATION.cff). The associated re
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+The drift-gate regression suite runs the actual workflow shell block against disposable local Git fixtures: edited files, new versioned files, numeric predecessor ordering, missing predecessors, and budget breaches. It makes no model or network calls and does not modify retained study data.

@@ -2,8 +2,8 @@
 
 **Design.** Starting from requirements v1.1 (baseline R1–R10 **plus** R11 "display sold-out pets with a label" and R12 "prevent duplicate orders"), the full SDD pipeline was regenerated once each:
 
-- **Experiment B:** requested and recorded the baseline model identifier (`claude-fable-5`) and recorded the same instruction-file hashes.
-- **Experiment C:** requested and recorded a different model identifier (`claude-sonnet-5`) while recording the same instruction-file hashes and using the same requirements as B.
+- **Experiment B:** requested and recorded the baseline model identifier (`claude-fable-5`) and recorded the same instruction-body hashes.
+- **Experiment C:** requested and recorded a different model identifier (`claude-sonnet-5`) while recording the same instruction-body hashes and using the same requirements as B.
 
 Both are single runs (n=1); Experiment A (n=10 retained outputs sharing a recorded model identifier) provides a descriptive reference range, not a validated noise floor.
 

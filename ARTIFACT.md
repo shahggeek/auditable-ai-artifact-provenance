@@ -29,6 +29,7 @@ tools/generation-report.sh by-file artifacts/SPEC_v1.0.md
 tools/trace-report.sh coverage
 tools/drift-check.sh artifacts/SPEC_v1.0.md experiments/A-pinned/run-02/SPEC.md
 tools/test-tools.sh
+python3 tools/test-drift-gate.py
 ```
 
 The scripts require Bash, Git, Python 3, `sed`, `grep`, `awk`, `sort`, and a SHA-256 implementation available through `shasum` or the platform-equivalent commands used by the scripts.
@@ -37,7 +38,7 @@ The scripts require Bash, Git, Python 3, `sed`, `grep`, `awk`, `sort`, and a SHA
 
 - Four retained baseline artifacts have queryable generation-event records.
 - Requirement identifiers are mechanically present across the retained downstream baseline artifacts.
-- Retained regeneration outputs vary structurally while reporting the same requested model identifier and instruction-file hash.
+- Retained regeneration outputs vary structurally while reporting the same requested model identifier and instruction-body hash.
 - The logging gap demonstrates that developer-controlled provenance is incomplete when capture is not invoked.
 - The anonymous snapshot can exercise event queries, but identity-bearing repository and commit fields are redacted and Git history is absent, so the recorded commit cannot be resolved during review.
 

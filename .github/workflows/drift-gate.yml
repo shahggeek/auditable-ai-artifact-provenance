@@ -22,7 +22,8 @@ jobs:
               echo "== drift check: $f vs $base =="
               bash tools/drift-check.sh /tmp/old_spec.md "$f"
             else
-              prior=$(git ls-tree -r --name-only "$base" -- 'artifacts/SPEC_v*.md' | sort -V | tail -1)
+              # ls-tree does not expand this filename wildcard; filter its listing.
+              prior=$(git ls-tree -r --name-only "$base" -- artifacts/ | grep -E '^artifacts/SPEC_v[^/]+[.]md$' | sort -V | tail -1)
               if [ -z "$prior" ]; then
                 echo "ERROR: $f is new and the base branch contains no prior SPEC version" >&2
                 exit 1
